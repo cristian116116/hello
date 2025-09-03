@@ -1,0 +1,109 @@
+openapi: 3.0.3
+info:
+  title: Bowling Team API
+  version: 1.0.0
+  description: API para gestionar equipos de bolos y sus partidas.
+servers:
+  - url: https://api.bowling-team.local
+paths:
+  /teams:
+    get:
+      summary: Listar equipos
+      responses:
+        '200':
+          description: Lista de equipos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+    post:
+      summary: Crear equipo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamCreate'
+      responses:
+        '201':
+          description: Equipo creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+  /games:
+    post:
+      summary: Registrar partida
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameCreate'
+      responses:
+        '201':
+          description: Partida registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+    get:
+      summary: Listar partidas
+      responses:
+        '200':
+          description: Lista de partidas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+components:
+  schemas:
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          example: team-1
+        name:
+          type: string
+          example: StrikeMasters
+    TeamCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          example: game-2025-01
+        teamId:
+          type: string
+          example: team-1
+        date:
+          type: string
+          format: date-time
+        score:
+          type: integer
+          example: 120
+    GameCreate:
+      type: object
+      required:
+        - teamId
+        - date
+        - score
+      properties:
+        teamId:
+          type: string
+        date:
+          type: string
+          format: date-time
+        score:
+          type: integer
